@@ -8,5 +8,8 @@ INSERT_ENCLOSURE = (
     "INSERT INTO enclosures (name) VALUES(%s) RETURNING name"
 )
 INSERT_ANIMAL = (
-    "INSERT INTO animals (name, quantity, enclosure_id) VALUES (%s, %s, %s) RETURNING name"
+    "INSERT INTO animals (name, quantity, enclosure_id) VALUES (%s, %s, %s) RETURNING name, quantity, enclosure_id"
 )
+DISPLAY_ANIMALS = {
+    "SELECT enclosures.id, animals.id FROM enclosures LEFT JOIN animals ON enclosures.id = animals.enclosure_id ORDER BY enclosure.id;"
+}

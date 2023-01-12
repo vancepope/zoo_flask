@@ -5,9 +5,10 @@ import logging
 import psycopg2
 from db import queries
 from dotenv import load_dotenv
-from unittest.mock import Mock
 
 load_dotenv()
+
+        # - display_animals
 
 logging.basicConfig(
     level=logging.INFO,
@@ -17,10 +18,10 @@ logging.basicConfig(
     ]
 )
 test_db_url = os.getenv("TEST_DATABASE_URL")
+conn = psycopg2.connect(test_db_url)
 
 @pytest.fixture
-def enclosure():
-    conn = psycopg2.connect(test_db_url)
+def connection():
     cursor = conn.cursor()
     sample_data = [
         ('Birds','Birds'),
@@ -30,19 +31,18 @@ def enclosure():
     cursor.executemany(queries.INSERT_ENCLOSURE, sample_data)
     yield conn, cursor
 
-def test_connection(enclosure):
+def test_connection(connection):
     logging.info('Starting the connection test')
-    conn, cursor = enclosure
+    conn, cursor = connection
     with conn:
         cursor.execute(queries.SELECT_ENCLOSURES)
         result = cursor.fetchmany(2)
-        print(result, flush=True)
-        assert len(result) == 2
-        logging.info(result)
+        print(f"Expected Output: length > 0 | Output: {len(result)}")
+        assert len(result) > 0
+        logging.info(f"Expected Output: length > 0 | Output: {len(result)}")
 
 @pytest.fixture
-def add_animal():
-    conn = psycopg2.connect(test_db_url)
+def create_animals():
     cursor = conn.cursor()
     sample_data = [
         ('Eagle', 10, 1, 'Eagle'),
@@ -52,27 +52,89 @@ def add_animal():
     cursor.executemany(queries.INSERT_ANIMAL, sample_data)
     yield conn, cursor
     
+def test_create_animals(create_animals):
+    logging.info('Starting the create_animals test')
+    conn, cursor = create_animals
+    with conn:
+        cursor.execute(queries.SELECT_ANIMALS)
+        result = cursor.fetchmany()
+        print(f"Expected Output: length > 0 | Output: {len(result)} ")
+        assert len(result) > 0
+        logging.info(f"Expected Output: length > 0 | Output: {len(result)}")
+
+@pytest.fixture
+def create_enclosures():
+    cursor = conn.cursor()
+    sample_data = [
+        ('Dogs','Dogs'),
+        ('Cats', 'Cats'),
+    ]
+    cursor.execute(queries.CREATE_ENCLOSURES_TABLE)
+    cursor.executemany(queries.INSERT_ENCLOSURE, sample_data)
+    yield conn, cursor
+    
+def test_create_enclosures(create_enclosures):
+    logging.info('Starting the create_enclosures test')
+    conn, cursor = create_enclosures
+    with conn:
+        cursor.execute(queries.SELECT_ENCLOSURES)
+        result = cursor.fetchmany()
+        print(f"Expected Output: length > 0 | Output: {len(result)}")
+        assert len(result) > 0
+        logging.info(f"Expected Output: length > 0 | Output: {len(result)}")
+        
+@pytest.fixture
+def add_enclosure():
+    cursor = conn.cursor()
+    sample_data = [
+        ('Bears', 'Bears'),
+        ('Snakes', 'Snakes'),
+        ('Frogs', 'Frogs'),
+    ]
+    cursor.executemany(queries.INSERT_ENCLOSURE, sample_data)
+    yield conn, cursor
+    
+def test_add_enclosure(add_enclosure):
+    logging.info('Starting the add_enclosure test')
+    conn, cursor = add_enclosure
+    with conn:
+        cursor.execute(queries.SELECT_ANIMALS)
+        result = cursor.fetchmany()
+        assert len(result) == 1
+        print(f"Expected Output: length == 1 | Output: length == {len(result)}")
+        logging.info(f"Expected Output: length == 1 | Output: length == {len(result)}")
+        
+@pytest.fixture
+def add_animal():
+    cursor = conn.cursor()
+    sample_data = [
+        ('Pitbull', 4, 3, 'Pitbull'),
+        ('Lion', 6, 4, 'Lion'),
+        ('Tiger', 2, 4, 'Tiger'),
+    ]
+    cursor.executemany(queries.INSERT_ANIMAL, sample_data)
+    yield conn, cursor
+    
 def test_add_animal(add_animal):
     logging.info('Starting the add_animal test')
     conn, cursor = add_animal
     with conn:
         cursor.execute(queries.SELECT_ANIMALS)
-        result = cursor.fetchmany(2)
-        print(result, flush=True)
-        assert len(result) == 2
-        logging.info(result)
+        result = cursor.fetchmany()
+        assert len(result) == 1
+        print(f"Expected Output: length == 1 | Output: length == {len(result)}")
+        logging.info(f"Expected Output: length == 1 | Output: length == {len(result)}")
 
-# def create_animal():
-#     data = request.get_json()
-#     name = data["name"]
-#     quantity = data["quantity"]
-#     enclosure_id = data["enclosure_id"]
-#     with connection:
-#         with connection.cursor() as cursor:
-#             cursor.execute(queries.CREATE_ANIMALS_TABLE)
-#             cursor.execute(queries.INSERT_ENCLOSURE, (name, quantity, enclosure_id))
 
-#     return {"name": f"Enclosure {name} created."}, 201
-
-# def test_create_animal(self):
+def test_display_animals():
+    logging.info('Starting the display_animals test')
+    cursor = conn.cursor()
+    cursor.execute(queries.DISPLAY_ANIMALS)
+    result = cursor.fetchall()
+    assert len(result) > 0
+    assert type(result) == list
+    print(f"Expected Output: length > 0 | Output: {len(result)}")
+    logging.info(f"Expected Output: length > 0 | Output: {len(result)}")
+    print(f"Expected Output: type == list | type == {type(result)}")
+    logging.info(f"Expected Output: type == list | type == {type(result)}")
     

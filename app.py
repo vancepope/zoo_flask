@@ -23,7 +23,7 @@ logging.basicConfig(
 )
 
 @app.post("/api/animal")
-def create_animal():
+def create_animals():
     data = request.get_json()
     name = data["name"]
     quantity = data["quantity"]
@@ -36,7 +36,7 @@ def create_animal():
     return {"name": f"Enclosure {name} created."}, 201
 
 @app.post("/api/enclosure")
-def create_enclosure():
+def create_enclosures():
     data = request.get_json()
     name = data["name"]
     with connection:
@@ -47,12 +47,10 @@ def create_enclosure():
             return {"name": f"Enclosure {name} created.", "message": "{result}"}, 201
 
 
-@app.get("/api/animal/<int:animal_id>")
-def get_animal(animal_id):
+@app.get("/api/animal/<int:id>")
+def get_animal():
     data = request.get_json()
-    name = data["name"]
-    quantity = data["quantity"]
-    enclosure_id = data["enclosure_id"]
+    animal_id = data["id"]
     with connection:
        with connection.cursor() as cursor:
             cursor.execute(queries.SELECT_ANIMAL_BY_ID, (animal_id, ))
@@ -60,12 +58,10 @@ def get_animal(animal_id):
             print(result, flush=True)
             return result, 200
         
-@app.get("/api/enclosure/<int:enclosure_id>")
-def get_enclosure(enclosure_id):
+@app.get("/api/enclosure/<int:id>")
+def get_enclosure():
     data = request.get_json()
-    name = data["name"]
-    quantity = data["quantity"]
-    id = data["enclosure_id"]
+    enclosure_id = data["id"]
     with connection:
        with connection.cursor() as cursor:
             cursor.execute(queries.SELECT_ENCLOSURE_BY_ID, (enclosure_id, ))
@@ -77,6 +73,49 @@ def get_enclosure(enclosure_id):
 def get_animals():
     with connection:
         with connection.cursor() as cursor:
-           cursor.execute(queries.SELECT_ENCLOSURE_BY_ID)
+           cursor.execute(queries.SELECT_ANIMALS)
            result = cursor.fetchall()
            return list(result), 200
+       
+@app.get("/api/enclosures")
+def get_animals():
+    with connection:
+        with connection.cursor() as cursor:
+           cursor.execute(queries.SELECT_ENCLOSURES)
+           result = cursor.fetchall()
+           return list(result), 200
+        
+@app.post("api/add_enclosure")
+def add_enclosure():
+    data = request.get_json()
+    name = data["name"]
+    dupe = data["dupe"]
+    with connection:
+       with connection.cursor() as cursor:
+            cursor.execute(queries.INSERT_ENCLOSURE, (name, dupe))
+            result = cursor.fetchone()[0]
+            print(result, flush=True)
+            return result, 201
+        
+@app.post("api/add_animal")
+def add_animal():
+    data = request.get_json()
+    name = data["name"]
+    quantity = data["quantity"]
+    enclosure_id = data["enclosure_id"]
+    dupe = data["dupe"]
+    with connection:
+       with connection.cursor() as cursor:
+            cursor.execute(queries.INSERT_ANIMAL, (name, quantity, enclosure_id, dupe))
+            result = cursor.fetchone()[0]
+            print(result, flush=True)
+            return result, 201
+
+
+@app.get("/api/display_animals")
+def display_animals():
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(queries.DISPLAY_ANIMALS)
+            result = cursor.fetchall()
+            return result, 200

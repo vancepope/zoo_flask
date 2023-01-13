@@ -32,13 +32,13 @@ SELECT_ANIMALS = (
     "SELECT * FROM animals;"
 )
 SELECT_ANIMAL_BY_ID = (
-    "SELECT * FROM animals WHERE id LIKE %s;"
+    "SELECT * FROM animals WHERE id = %s;"
 )
 SELECT_ENCLOSURES = (
     "SELECT * FROM enclosures;"
 )
 SELECT_ENCLOSURE_BY_ID = (
-    "SELECT * FROM enclosures WHERE id LIKE %s;"
+    "SELECT * FROM enclosures WHERE id = %s;"
 )
 DISPLAY_ANIMALS = (
     """ SELECT enclosures.id, enclosures.group_name, animals.id, animals.name, animals.quantity 

@@ -34,7 +34,7 @@
 5. Assumptions
     - As a developer, I should be able to create a connection to an ElephantSQL database
     - As a developer, I should be able to create a table in the database and return a string that notifies me of its creation.
-    - As a developer, I should be able to insert data into tables in the database and return an object containing the properties and data in JavaScript Object Notation (JSON)
+    - As a developer, I should be able to insert data into tables in the database and return an object containing the data
     - A report detailing each specific test along with its inputs and expected outputs should be generated
     - A log file detailing each process of the application and tests should be generated
     - As a developer, I should be able to display a list of animals that would contain data such as:

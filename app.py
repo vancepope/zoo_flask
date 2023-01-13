@@ -15,59 +15,60 @@ connection = psycopg2.connect(db_url)
 
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.WARNING,
     format= "%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s",
     handlers=[
-        logging.FileHandler(r'test_app.log')
+        logging.FileHandler(r'app.log')
     ]
 )
 
+@app.get("/")
+def hello_monty():
+    return ""
+
+@app.post("/api/enclosure")
+def create_enclosures():
+    data = request.get_json()
+    group_name = data["group_name"]
+    dupe = data["dupe_name"]
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(queries.CREATE_ENCLOSURES_TABLE)
+            cursor.execute(queries.INSERT_ENCLOSURE, (group_name, dupe))
+    return {"message": f"{group_name} has been created."}, 201
+        
 @app.post("/api/animal")
 def create_animals():
     data = request.get_json()
     name = data["name"]
     quantity = data["quantity"]
     enclosure_id = data["enclosure_id"]
+    dupe = data["dupe_name"]
     with connection:
         with connection.cursor() as cursor:
             cursor.execute(queries.CREATE_ANIMALS_TABLE)
-            cursor.execute(queries.INSERT_ANIMAL, (name, quantity, enclosure_id))
+            cursor.execute(queries.INSERT_ANIMAL, (name, quantity, enclosure_id, dupe))
+    return {"message": f"{name} has been created."}, 201
 
-    return {"name": f"Enclosure {name} created."}, 201
-
-@app.post("/api/enclosure")
-def create_enclosures():
-    data = request.get_json()
-    name = data["name"]
-    with connection:
-        with connection.cursor() as cursor:
-            cursor.execute(queries.CREATE_ENCLOSURES_TABLE)
-            cursor.execute(queries.INSERT_ENCLOSURE, (name,))
-            result = cursor.fetchone()[0]
-            return {"name": f"Enclosure {name} created.", "message": "{result}"}, 201
 
 
 @app.get("/api/animal/<int:id>")
-def get_animal():
-    data = request.get_json()
-    animal_id = data["id"]
+def get_animal(id):
     with connection:
        with connection.cursor() as cursor:
-            cursor.execute(queries.SELECT_ANIMAL_BY_ID, (animal_id, ))
-            result = cursor.fetchone()[0]
+            cursor.execute(queries.SELECT_ANIMAL_BY_ID, (id, ))
+            result = cursor.fetchone()
             print(result, flush=True)
-            return result, 200
+            return list(result), 200
         
-@app.get("/api/enclosure/<int:id>")
-def get_enclosure():
-    data = request.get_json()
-    enclosure_id = data["id"]
+@app.get("/api/enclosure/<int:enclosure_id>")
+def get_enclosure(id):
     with connection:
        with connection.cursor() as cursor:
-            cursor.execute(queries.SELECT_ENCLOSURE_BY_ID, (enclosure_id, ))
-            result = cursor.fetchone()[0]
+            cursor.execute(queries.SELECT_ENCLOSURE_BY_ID, (id, ))
+            result = cursor.fetchone()
             print(result, flush=True)
-            return result, 200
+            return list(result), 200
         
 @app.get("/api/animals")
 def get_animals():
@@ -78,14 +79,14 @@ def get_animals():
            return list(result), 200
        
 @app.get("/api/enclosures")
-def get_animals():
+def get_enclosures():
     with connection:
         with connection.cursor() as cursor:
            cursor.execute(queries.SELECT_ENCLOSURES)
            result = cursor.fetchall()
            return list(result), 200
         
-@app.post("api/add_enclosure")
+@app.post("/api/add_enclosure")
 def add_enclosure():
     data = request.get_json()
     name = data["name"]
@@ -93,11 +94,9 @@ def add_enclosure():
     with connection:
        with connection.cursor() as cursor:
             cursor.execute(queries.INSERT_ENCLOSURE, (name, dupe))
-            result = cursor.fetchone()[0]
-            print(result, flush=True)
-            return result, 201
+    return {"message": f"{name} has been created."}, 201
         
-@app.post("api/add_animal")
+@app.post("/api/add_animal")
 def add_animal():
     data = request.get_json()
     name = data["name"]
@@ -107,9 +106,7 @@ def add_animal():
     with connection:
        with connection.cursor() as cursor:
             cursor.execute(queries.INSERT_ANIMAL, (name, quantity, enclosure_id, dupe))
-            result = cursor.fetchone()[0]
-            print(result, flush=True)
-            return result, 201
+    return {"message": f"{name} has been created."}, 201
 
 
 @app.get("/api/display_animals")

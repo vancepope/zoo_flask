@@ -8,8 +8,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-        # - display_animals
-
 logging.basicConfig(
     level=logging.INFO,
     format= "%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s",
@@ -30,7 +28,6 @@ def connection():
     cursor.execute(queries.CREATE_ENCLOSURES_TABLE)
     cursor.executemany(queries.INSERT_ENCLOSURE, sample_data)
     yield conn, cursor
-
 def test_connection(connection):
     logging.info('Starting the connection test')
     conn, cursor = connection
@@ -51,7 +48,6 @@ def create_animals():
     cursor.execute(queries.CREATE_ANIMALS_TABLE)
     cursor.executemany(queries.INSERT_ANIMAL, sample_data)
     yield conn, cursor
-    
 def test_create_animals(create_animals):
     logging.info('Starting the create_animals test')
     conn, cursor = create_animals
@@ -71,8 +67,7 @@ def create_enclosures():
     ]
     cursor.execute(queries.CREATE_ENCLOSURES_TABLE)
     cursor.executemany(queries.INSERT_ENCLOSURE, sample_data)
-    yield conn, cursor
-    
+    yield conn, cursor   
 def test_create_enclosures(create_enclosures):
     logging.info('Starting the create_enclosures test')
     conn, cursor = create_enclosures
@@ -93,7 +88,6 @@ def add_enclosure():
     ]
     cursor.executemany(queries.INSERT_ENCLOSURE, sample_data)
     yield conn, cursor
-    
 def test_add_enclosure(add_enclosure):
     logging.info('Starting the add_enclosure test')
     conn, cursor = add_enclosure
@@ -113,8 +107,7 @@ def add_animal():
         ('Tiger', 2, 4, 'Tiger'),
     ]
     cursor.executemany(queries.INSERT_ANIMAL, sample_data)
-    yield conn, cursor
-    
+    yield conn, cursor  
 def test_add_animal(add_animal):
     logging.info('Starting the add_animal test')
     conn, cursor = add_animal
@@ -124,7 +117,6 @@ def test_add_animal(add_animal):
         assert len(result) == 1
         print(f"Expected Output: length == 1 | Output: length == {len(result)}")
         logging.info(f"Expected Output: length == 1 | Output: length == {len(result)}")
-
 
 def test_display_animals():
     logging.info('Starting the display_animals test')

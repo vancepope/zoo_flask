@@ -5,7 +5,6 @@ import logging
 import psycopg2
 from db import queries
 from dotenv import load_dotenv
-from psycopg2.extras import LoggingConnection
 load_dotenv()
 
 logging.basicConfig(

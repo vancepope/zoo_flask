@@ -1,23 +1,21 @@
 ## Zoo Flask
  - Built with Flask utilizing Elephant SQL
 
- # :clipboard: Test Plan
+<details>
+<summary> :clipboard: Click here to test plan</summary>
+<br />
+
 1. Purpose
     - The purpose of our tests are to help develop an application that will be able to ensure animals can be assigned to enclosures without the presence of harm, provide and maintain a better quality of life to enable researchers more conclusive data for their studies. At this stage of the project, we will begin by utilizing the process of test driven developement to solidify the functionality and stability of the application.
 
 2. Scope
     - The scope of this application will be to test the following methods:
-        - connect_to_db
-        - create_enclosures_table
-        - create_animals_table
+        - connection
+        - create_enclosures
+        - create_animals
         - add_enclosure
         - add_animal
         - display_animals
-
-<details>
-<summary> :memo: Click here to see more</summary>
-<br />
-
 3. Inputs
     1. Enclosures
         - Name

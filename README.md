@@ -41,4 +41,32 @@
         - Quantity
         - Enclosure Id
         - Enclosure Name
+
+6. Summary
+    - Feature: Database
+    - Environment: Development 
+    - Duration: 2 hours 
+    - Coverage: 95% 
+    - Results: Pass
+
+7. Test Cases
+    - connection should return rows greater than 0, which would mean we have successfuly connected to the database.
+        - Passed
+    - create_animals method will return > 0 
+        - Passed
+    - create_enclosures method will return > 0 
+        - Passed
+    - add_enclosure will return a length of 1
+        - Note: a 'dupe' variable will be used to check database for duplicates and not insert if such duplicate exists.
+        - Passed
+    - add_animal will return a length of 1
+        - Note: a 'dupe' variable will be used to check database for duplicates and not insert if such duplicate exists.
+        - Passed
+    - display_animals will return a list and a length > 0
+        - Passed
+
+8. Conclusion
+    - According to the test results, the database feature is functioning as expected. No issues were encountered during testing.
+
+
 </details>

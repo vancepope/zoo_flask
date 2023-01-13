@@ -5,7 +5,7 @@ import logging
 import psycopg2
 from db import queries
 from dotenv import load_dotenv
-
+from psycopg2.extras import LoggingConnection
 load_dotenv()
 
 logging.basicConfig(
@@ -16,6 +16,7 @@ logging.basicConfig(
     ]
 )
 test_db_url = os.getenv("TEST_DATABASE_URL")
+
 conn = psycopg2.connect(test_db_url)
 
 @pytest.fixture
@@ -120,11 +121,14 @@ def test_add_animal(add_animal):
 
 def test_display_animals():
     logging.info('Starting the display_animals test')
+    data = []
     cursor = conn.cursor()
     cursor.execute(queries.DISPLAY_ANIMALS)
     result = cursor.fetchall()
-    assert len(result) > 0
-    assert type(result) == list
+    for x in result:
+        data.append({"enclosure_id": x[0], "group_name": x[1], "id": x[2], "name": x[3], "quantity": x[4]})
+    assert len(data) > 0
+    assert type(data) == list
     print(f"Expected Output: length > 0 | Output: {len(result)}")
     logging.info(f"Expected Output: length > 0 | Output: {len(result)}")
     print(f"Expected Output: type == list | type == {type(result)}")

@@ -15,7 +15,7 @@ connection = psycopg2.connect(db_url)
 
 
 logging.basicConfig(
-    level=logging.WARNING,
+    level=logging.INFO,
     format= "%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s",
     handlers=[
         logging.FileHandler(r'app.log')
@@ -28,6 +28,7 @@ def hello_monty():
 
 @app.post("/api/enclosure")
 def create_enclosures():
+    logging.info("Starting in create_enclosures method")
     data = request.get_json()
     group_name = data["group_name"]
     dupe = data["dupe_name"]
@@ -39,6 +40,7 @@ def create_enclosures():
         
 @app.post("/api/animal")
 def create_animals():
+    logging.info("Starting in create_animals method")
     data = request.get_json()
     name = data["name"]
     quantity = data["quantity"]
@@ -54,6 +56,7 @@ def create_animals():
 
 @app.get("/api/animal/<int:id>")
 def get_animal(id):
+    logging.info("Starting in get_animals method")
     with connection:
        with connection.cursor() as cursor:
             cursor.execute(queries.SELECT_ANIMAL_BY_ID, (id, ))
@@ -63,6 +66,7 @@ def get_animal(id):
         
 @app.get("/api/enclosure/<int:enclosure_id>")
 def get_enclosure(id):
+    logging.info("Starting in get_enclosure method")
     with connection:
        with connection.cursor() as cursor:
             cursor.execute(queries.SELECT_ENCLOSURE_BY_ID, (id, ))
@@ -72,6 +76,7 @@ def get_enclosure(id):
         
 @app.get("/api/animals")
 def get_animals():
+    logging.info("Starting in get_animals method")
     with connection:
         with connection.cursor() as cursor:
            cursor.execute(queries.SELECT_ANIMALS)
@@ -80,6 +85,7 @@ def get_animals():
        
 @app.get("/api/enclosures")
 def get_enclosures():
+    logging.info("Starting in get_enclosures method")
     with connection:
         with connection.cursor() as cursor:
            cursor.execute(queries.SELECT_ENCLOSURES)
@@ -88,6 +94,7 @@ def get_enclosures():
         
 @app.post("/api/add_enclosure")
 def add_enclosure():
+    logging.info("Starting in add_enclosure method")
     data = request.get_json()
     name = data["name"]
     dupe = data["dupe"]
@@ -98,6 +105,7 @@ def add_enclosure():
         
 @app.post("/api/add_animal")
 def add_animal():
+    logging.info("Starting in add_animal method")
     data = request.get_json()
     name = data["name"]
     quantity = data["quantity"]
@@ -111,8 +119,12 @@ def add_animal():
 
 @app.get("/api/display_animals")
 def display_animals():
+    logging.info("Starting in display_animals method")
+    data = []
     with connection:
         with connection.cursor() as cursor:
             cursor.execute(queries.DISPLAY_ANIMALS)
             result = cursor.fetchall()
-            return result, 200
+            for x in result:
+                data.append({"enclosure_id": x[0], "group_name": x[1], "id": x[2], "name": x[3], "quantity": x[4]})
+            return data, 200

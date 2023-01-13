@@ -2,7 +2,7 @@
  - Built with Flask utilizing Elephant SQL
 
 <details>
-<summary> :clipboard: Click here to test plan</summary>
+<summary> :clipboard: Click here to see test plan</summary>
 <br />
 
 1. Purpose

@@ -6,7 +6,11 @@
 <br />
 
 1. Purpose
-    - The purpose of our tests are to help develop an application that will be able to ensure animals can be assigned to enclosures without the presence of harm, provide and maintain a better quality of life to enable researchers more conclusive data for their studies. At this stage of the project, we will begin by utilizing the process of test driven developement to solidify the functionality and stability of the application.
+    - The purpose of our tests are to help develop an application that will be able to ensure animals 
+    can be assigned to enclosures without the presence of harm, provide and maintain a better quality 
+    of life to enable researchers more conclusive data for their studies. At this stage of the project, 
+    we will begin by utilizing the process of test driven developement to solidify the functionality 
+    and stability of the application.
 
 2. Scope
     - The scope of this application will be to test the following methods:
@@ -67,6 +71,4 @@
 
 8. Conclusion
     - According to the test results, the database feature is functioning as expected. No issues were encountered during testing.
-
-
 </details>

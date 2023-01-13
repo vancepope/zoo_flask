@@ -62,35 +62,41 @@ def get_animal(id):
             cursor.execute(queries.SELECT_ANIMAL_BY_ID, (id, ))
             result = cursor.fetchone()
             print(result, flush=True)
-            return list(result), 200
+            return {"id": result[0], "name": result[1], "quantity": result[2], "enclosure_id": result[3]}, 200
         
 @app.get("/api/enclosure/<int:enclosure_id>")
-def get_enclosure(id):
+def get_enclosure(enclosure_id):
     logging.info("Starting in get_enclosure method")
     with connection:
        with connection.cursor() as cursor:
-            cursor.execute(queries.SELECT_ENCLOSURE_BY_ID, (id, ))
+            cursor.execute(queries.SELECT_ENCLOSURE_BY_ID, (enclosure_id, ))
             result = cursor.fetchone()
             print(result, flush=True)
-            return list(result), 200
+            return {"id": result[0], "group_name": result[1]}, 200
         
 @app.get("/api/animals")
 def get_animals():
     logging.info("Starting in get_animals method")
+    data = []
     with connection:
         with connection.cursor() as cursor:
-           cursor.execute(queries.SELECT_ANIMALS)
-           result = cursor.fetchall()
-           return list(result), 200
+            cursor.execute(queries.SELECT_ANIMALS)
+            result = cursor.fetchall()
+            for row in result:
+                data.append({"id": row[0], "name": row[1], "quantity": row[2], "enclosure_id": row[3]})
+            return data, 200
        
 @app.get("/api/enclosures")
 def get_enclosures():
     logging.info("Starting in get_enclosures method")
+    data = []
     with connection:
         with connection.cursor() as cursor:
            cursor.execute(queries.SELECT_ENCLOSURES)
            result = cursor.fetchall()
-           return list(result), 200
+           for x in result:
+               data.append({"id": x[0], "group_name": x[1]})
+           return data, 200
         
 @app.post("/api/add_enclosure")
 def add_enclosure():
@@ -126,5 +132,5 @@ def display_animals():
             cursor.execute(queries.DISPLAY_ANIMALS)
             result = cursor.fetchall()
             for x in result:
-                data.append({"enclosure_id": x[0], "group_name": x[1], "id": x[2], "name": x[3], "quantity": x[4]})
+                data.append({"enclosure_id": x[0], "group_name": x[1], "animal_id": x[2], "name": x[3], "quantity": x[4]})
             return data, 200

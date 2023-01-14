@@ -1,8 +1,7 @@
 ## Zoo Flask
  - Built with Flask utilizing Elephant SQL
+ - Utilizes Test Driven Development (TDD) to build an API for creating enclosures for different animals
 
-<details>
-<summary> :clipboard: Click here to see test plan</summary>
 <br />
 
 1. Purpose
@@ -71,4 +70,36 @@
 
 8. Conclusion
     - According to the test results, the database feature is functioning as expected. No issues were encountered during testing.
+
+<details>
+<summary> Click to see route photos</summary>
+<br />
+
+1. '/api/animal'
+    <img src="/images/animal.png" alt="Animal route">
+
+2. '/api/enclosure'
+    <img src="/images/enclosure.png" alt="Enclosure route">
+
+3. '/api/animal/<int:id>'
+    <img src="/images/getanimalbyid.png" alt="Get Animal route">
+
+4. '/api/enclosure/<int:enclosure_id>'
+    <img src="/images/getenclosurebyid.png" alt="Get Enclosure route">
+
+5. '/api/animals'
+    <img src="/images/getanimals.png" alt="Get Animals route">
+
+6. '/api/enclosures'
+    <img src="/images/getenclosures.png" alt="Get Enclosures route">
+
+7. '/api/add_animal'
+    <img src="/images/addanimal.png" alt="Add Animal route">
+
+8. '/api/add_enclosure'
+    <img src="/images/addenclosure.png" alt="Add Enclosure route">
+
+9. '/api/display_animals'
+    <img src="/images/displayanimals.png" alt="Display Animals route">
+
 </details>

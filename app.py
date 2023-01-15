@@ -31,11 +31,10 @@ def create_enclosures():
     logging.info("Starting in create_enclosures method")
     data = request.get_json()
     group_name = data["group_name"]
-    dupe = data["dupe_name"]
     with connection:
         with connection.cursor() as cursor:
             cursor.execute(queries.CREATE_ENCLOSURES_TABLE)
-            cursor.execute(queries.INSERT_ENCLOSURE, (group_name, dupe))
+            cursor.execute(queries.INSERT_ENCLOSURE, {"group_name": group_name})
     return {"message": f"{group_name} has been created."}, 201
         
 @app.post("/api/animal")
@@ -45,11 +44,10 @@ def create_animals():
     name = data["name"]
     quantity = data["quantity"]
     enclosure_id = data["enclosure_id"]
-    dupe = data["dupe_name"]
     with connection:
         with connection.cursor() as cursor:
             cursor.execute(queries.CREATE_ANIMALS_TABLE)
-            cursor.execute(queries.INSERT_ANIMAL, (name, quantity, enclosure_id, dupe))
+            cursor.execute(queries.INSERT_ANIMAL, {"name": name, "quantity": quantity, "enclosure_id": enclosure_id})
     return {"message": f"{name} has been created."}, 201
 
 
@@ -102,12 +100,11 @@ def get_enclosures():
 def add_enclosure():
     logging.info("Starting in add_enclosure method")
     data = request.get_json()
-    name = data["name"]
-    dupe = data["dupe"]
+    group_name = data["group_name"]
     with connection:
        with connection.cursor() as cursor:
-            cursor.execute(queries.INSERT_ENCLOSURE, (name, dupe))
-    return {"message": f"{name} has been created."}, 201
+            cursor.execute(queries.INSERT_ENCLOSURE, {"group_name": group_name})
+    return {"message": f"{group_name} has been created."}, 201
         
 @app.post("/api/add_animal")
 def add_animal():
@@ -116,10 +113,9 @@ def add_animal():
     name = data["name"]
     quantity = data["quantity"]
     enclosure_id = data["enclosure_id"]
-    dupe = data["dupe"]
     with connection:
        with connection.cursor() as cursor:
-            cursor.execute(queries.INSERT_ANIMAL, (name, quantity, enclosure_id, dupe))
+            cursor.execute(queries.INSERT_ANIMAL, {"name": name, "quantity": quantity, "enclosure_id": enclosure_id})
     return {"message": f"{name} has been created."}, 201
 
 

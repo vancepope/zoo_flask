@@ -22,8 +22,8 @@ conn = psycopg2.connect(test_db_url)
 def connection():
     cursor = conn.cursor()
     sample_data = [
-        ('Birds','Birds'),
-        ('Apes', 'Apes'),
+        {"group_name": 'Birds'},
+        {"group_name":'Apes'},
     ]
     cursor.execute(queries.CREATE_ENCLOSURES_TABLE)
     cursor.executemany(queries.INSERT_ENCLOSURE, sample_data)
@@ -42,8 +42,8 @@ def test_connection(connection):
 def create_animals():
     cursor = conn.cursor()
     sample_data = [
-        ('Eagle', 10, 1, 'Eagle'),
-        ('Gorilla', 5, 2, 'Gorilla'),
+        {"name": "Eagle", "quantity":10, "enclosure_id":1},
+        {"name": "Gorilla", "quantity": 5, "enclosure_id": 2},
     ]
     cursor.execute(queries.CREATE_ANIMALS_TABLE)
     cursor.executemany(queries.INSERT_ANIMAL, sample_data)
@@ -62,8 +62,8 @@ def test_create_animals(create_animals):
 def create_enclosures():
     cursor = conn.cursor()
     sample_data = [
-        ('Dogs','Dogs'),
-        ('Cats', 'Cats'),
+        {"group_name": "Dogs"},
+        {"group_name": "Cats"},
     ]
     cursor.execute(queries.CREATE_ENCLOSURES_TABLE)
     cursor.executemany(queries.INSERT_ENCLOSURE, sample_data)
@@ -82,9 +82,9 @@ def test_create_enclosures(create_enclosures):
 def add_enclosure():
     cursor = conn.cursor()
     sample_data = [
-        ('Bears', 'Bears'),
-        ('Snakes', 'Snakes'),
-        ('Frogs', 'Frogs'),
+        {"group_name": "Bears" },
+        {"group_name": "Snakes"},
+        {"group_name": "Frogs"},
     ]
     cursor.executemany(queries.INSERT_ENCLOSURE, sample_data)
     yield conn, cursor
@@ -102,9 +102,9 @@ def test_add_enclosure(add_enclosure):
 def add_animal():
     cursor = conn.cursor()
     sample_data = [
-        ('Pitbull', 4, 3, 'Pitbull'),
-        ('Lion', 6, 4, 'Lion'),
-        ('Tiger', 2, 4, 'Tiger'),
+        {"name": "Pitbull", "quantity": 4, "enclosure_id": 3},
+        {"name": "Lion", "quantity": 6, "enclosure_id": 4},
+        {"name":"Tiger", "quantity": 2, "enclosure_id": 4},
     ]
     cursor.executemany(queries.INSERT_ANIMAL, sample_data)
     yield conn, cursor  

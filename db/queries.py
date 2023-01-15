@@ -10,8 +10,8 @@ CREATE_ENCLOSURES_TABLE = (
 )
 INSERT_ANIMAL = (
     """ INSERT INTO   animals(name, quantity, enclosure_id) 
-        SELECT  %s, %s, %s
-        WHERE   %s NOT IN
+        SELECT  %(name)s, %(quantity)s, %(enclosure_id)s
+        WHERE   %(name)s  NOT IN
             (
                 SELECT  name
                 FROM    animals
@@ -20,8 +20,8 @@ INSERT_ANIMAL = (
 )
 INSERT_ENCLOSURE = (
     """ INSERT INTO   enclosures(group_name)
-        SELECT  %s
-        WHERE   %s  NOT IN
+        SELECT  %(group_name)s
+        WHERE   %(group_name)s  NOT IN
             (
                 SELECT  group_name
                 FROM    enclosures

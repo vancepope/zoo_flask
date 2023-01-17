@@ -59,7 +59,6 @@ def get_animal(id):
        with connection.cursor() as cursor:
             cursor.execute(queries.SELECT_ANIMAL_BY_ID, (id, ))
             result = cursor.fetchone()
-            print(result, flush=True)
             return {"id": result[0], "name": result[1], "quantity": result[2], "enclosure_id": result[3]}, 200
         
 @app.get("/api/enclosure/<int:enclosure_id>")
@@ -69,7 +68,6 @@ def get_enclosure(enclosure_id):
        with connection.cursor() as cursor:
             cursor.execute(queries.SELECT_ENCLOSURE_BY_ID, (enclosure_id, ))
             result = cursor.fetchone()
-            print(result, flush=True)
             return {"id": result[0], "group_name": result[1]}, 200
         
 @app.get("/api/animals")

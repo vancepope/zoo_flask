@@ -77,6 +77,26 @@ def test_create_enclosures(create_enclosures):
         print(f"Expected Output: length > 0 | Output: {len(result)}")
         assert len(result) > 0
         logging.info(f"Expected Output: length > 0 | Output: {len(result)}")
+
+@pytest.fixture
+def create_animal_foods():
+    cursor = conn.cursor()
+    sample_data = [
+        {"food": "Banana", "food_type": "Fruit"},
+        {"food": "Steak", "food_type": "Meat"},
+    ]
+    cursor.execute(queries.CREATE_ANIMAL_FOODS_TABLE)
+    cursor.executemany(queries.INSERT_ANIMAL_FOOD, sample_data)
+    yield conn, cursor
+def test_create_animal_foods(create_animal_foods):
+    logging.info('Starting the create_animal_foods test')
+    conn, cursor = create_animal_foods
+    with conn:
+        cursor.execute(queries.SELECT_ANIMAL_FOODS)
+        result = cursor.fetchmany()
+        print(f"Expected Output: length == 2 | Output: {cursor.rowcount} ")
+        assert cursor.rowcount == 2
+        logging.info(f"Expected Output: length == 2 | Output: {cursor.rowcount}")
         
 @pytest.fixture
 def add_enclosure():
@@ -116,6 +136,26 @@ def test_add_animal(add_animal):
         result = cursor.fetchmany()
         assert len(result) == 1
         print(f"Expected Output: length == 1 | Output: length == {len(result)}")
+        logging.info(f"Expected Output: length == 1 | Output: length == {len(result)}")
+
+@pytest.fixture
+def alter_animals_table():
+    cursor = conn.cursor()
+    sample_data = [
+        {"food_id": 1, "animal_id": 2},
+        {"food_id": 2, "animal_id": 4},
+    ]
+    cursor.execute(queries.ADD_COLUMN_TO_ANIMALS_TABLE)
+    cursor.executemany(queries.UPDATE_FOOD_ID, sample_data)
+    yield conn, cursor   
+def test_alter_animals_table(alter_animals_table):
+    logging.info('Starting the create_enclosures test')
+    conn, cursor = alter_animals_table
+    with conn:
+        cursor.execute(queries.SELECT_ANIMALS)
+        result = cursor.fetchmany()
+        print(f"Expected Output: length == 1 | Output: length == {len(result)}")
+        assert len(result) > 0
         logging.info(f"Expected Output: length == 1 | Output: length == {len(result)}")
 
 def test_display_animals():
